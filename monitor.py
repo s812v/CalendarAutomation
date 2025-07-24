@@ -38,13 +38,13 @@ class fileHandler(FileSystemEventHandler):
             inactive_time = time.time() - self.lastActive # last file modification within directory
             if self.sessionActive and (inactive_time > INACTIVITY_LIMIT or idle_time > INACTIVITY_LIMIT):
                 sessionEnd = datetime.datetime.now()
-                duration = sessionEnd - self.sessionActive
-                print(f"Session ended at {sessionEnd}, Duration: {duration}")
-                #addEvent here
+                duration = sessionEnd - self.sessionStart
+
+                if duration.total_seconds() > INVALIDITY_DURATION: # long session
+                    print(f"Session ended at {sessionEnd}, Duration: {duration}")
+                    #addEvent here
                 self.sessionActive = False
-
-
-    #if duration of session lesser than INACTIVITY_DURATION, invalid 
+                    
 
 # runs script until keyboard interrupt
 if __name__ == "__main__":
