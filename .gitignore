@@ -1,0 +1,5 @@
+# OAuth token (contains user access tokens)
+token.json
+
+# OAuth 2.0 client credentials
+credentials.json
