@@ -11,8 +11,8 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 MONITORED_DIRECTORY = r'C:\Users\Shireen\OneDrive\Desktop\VSCode Codes' #r stands for raw string
-INACTIVITY_LIMIT = 30     # 30 minutes of no file modification/creation
-INVALIDITY_DURATION = 10  #10 min duration sessions (or less) marked as 'null'
+INACTIVITY_LIMIT = 30 * 60    # 30 minutes of no file modification/creation
+INVALIDITY_DURATION = 10 * 60  #10 min duration sessions (or less) marked as 'null'
 
 class fileHandler(FileSystemEventHandler):
     def __init__(self):
@@ -60,7 +60,7 @@ class fileHandler(FileSystemEventHandler):
 
     def inactivity_monitor(self):
         while(True):
-            time.sleep(5)  # every 10 seconds
+            time.sleep(10)  # every 10 seconds
             inactive_time = time.time() - self.lastActive # time since last file modification
             sessionEnd = datetime.datetime.now()
             if self.sessionActive and (inactive_time > INACTIVITY_LIMIT): 
