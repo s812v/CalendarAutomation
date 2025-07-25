@@ -13,6 +13,7 @@ SCOPES = ["https://www.googleapis.com/auth/calendar"]
 CALENDAR_ID = "3a1773ac22fdcc8632d114dd38affc3b05dfe4ae3018628e6357c952c95e3744@group.calendar.google.com"
 TIMEZONE = "Asia/Kolkata"
 
+
 def getCreds():
   """Shows basic usage of the Google Calendar API.
   Prints the start and name of the next 10 events on the user's calendar.
@@ -35,15 +36,16 @@ def getCreds():
     # Save the credentials for the next run
     with open("token.json", "w") as token:
       token.write(creds.to_json())
+    
+  return creds
 
 
-def addEvent(start_time, end_time, description):
+def addEvent(start_time, end_time, title):
   creds = getCreds() 
   service = build("calendar", "v3", credentials=creds)
 
   event = {
-    'summary': 'Coding Session',
-    'description': description,
+    'summary': title,
     'start': {
       'dateTime': start_time.isoformat(),
       'timeZone': TIMEZONE,
