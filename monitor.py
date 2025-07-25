@@ -11,9 +11,8 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 MONITORED_DIRECTORY = r'C:\Users\Shireen\OneDrive\Desktop\VSCode Codes' #r stands for raw string
-INACTIVITY_LIMIT = 30 * 60    # 30 minutes of no file modification/creation
-INVALIDITY_DURATION = 10 * 60  #10 min duration sessions (or less) marked as 'null'
-
+INACTIVITY_LIMIT = 30     # 30 minutes of no file modification/creation
+INVALIDITY_DURATION = 10  #10 min duration sessions (or less) marked as 'null'
 
 class fileHandler(FileSystemEventHandler):
     def __init__(self):
@@ -25,8 +24,7 @@ class fileHandler(FileSystemEventHandler):
         self.inactivity_thread.daemon = True # allows the main thread to exit even if this thread is running
         self.inactivity_thread.start()
         
-    def on_modified(self, event):
-        #print(f'File {event.src_path} was modified')
+    def on_modified(self, _):
         self.lastActive = time.time()
         
         if not self.sessionActive: #session hasnt started
@@ -41,7 +39,7 @@ class fileHandler(FileSystemEventHandler):
             print(f"Error: Directory '{MONITORED_DIRECTORY}' does not exist.")
             self.project = "Error"
             return
-       
+       #
         subdirectories = [d for d in os.listdir(MONITORED_DIRECTORY) if os.path.isdir(os.path.join(MONITORED_DIRECTORY, d))]
         
         if not subdirectories:
@@ -62,19 +60,18 @@ class fileHandler(FileSystemEventHandler):
 
     def inactivity_monitor(self):
         while(True):
-            time.sleep(10)  # every 10 seconds
-           # idle_time = get_idle_duration() # mouse/keyboard movement
-            inactive_time = time.time() - self.lastActive # last file modification within directory
-            if self.sessionActive and (inactive_time > INACTIVITY_LIMIT):
-                sessionEnd = datetime.datetime.now()
+            time.sleep(5)  # every 10 seconds
+            inactive_time = time.time() - self.lastActive # time since last file modification
+            sessionEnd = datetime.datetime.now()
+            if self.sessionActive and (inactive_time > INACTIVITY_LIMIT): 
                 duration = sessionEnd - self.sessionStart
                 if duration.total_seconds() > INVALIDITY_DURATION: # long session
                     self.get_last_modified_folder()
-                    print(f"Session ended at {sessionEnd}, Duration: {duration}, Project: {self.project}")
-                    addEvent(self.sessionStart,sessionEnd, str(self.project))
+                    print(f"Session ended at {sessionEnd}, Duration: {duration}, Project: Coding Session: {self.project}")
+                    addEvent(self.sessionStart,sessionEnd, 'Coding Session: ' + str(self.project))
                 self.sessionActive = False
-                    
-# runs script until keyboard interrupt
+                      
+# runs script until keyboard interrupt  
 if __name__ == "__main__":
     # initialize logging event handler
     event_handler = fileHandler()
