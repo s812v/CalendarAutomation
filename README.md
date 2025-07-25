@@ -20,9 +20,11 @@ It combines:
 ---
 
 ## 🏗️ Project Structure
-│
-├── monitor.py # Watches directory, detects sessions
-├── calendar_integration.py # Handles Google Calendar API logic
-├── credentials.json # Google API credentials 
-├── token.json # Generated after first login (auto-created)
+
+CalendarAutomation/
+├── monitor.py                 # Watches directory and tracks coding sessions
+├── calendar_integration.py   # Handles Google Calendar API authentication + event logging
+├── credentials.json           # Your Google OAuth2 credentials (downloaded from Google Cloud Console)
+├── token.json                 # Auto-generated after first successful login
+├── README.md                  # Documentation and setup guide
 
