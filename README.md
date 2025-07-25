@@ -1,6 +1,6 @@
 # 🗓️ Auto Calendar Logger for Coding Sessions
 
-This project automatically tracks your coding sessions in VS Code (or any file modifications) and logs them as events in a **Google Calendar**.
+This Python Script automatically tracks your coding sessions in VS Code (or any file modifications) and logs them as events in a **Google Calendar**.
 
 It combines:
 - **File system monitoring** (using `watchdog`) to detect when you start working
