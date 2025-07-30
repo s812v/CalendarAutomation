@@ -7,12 +7,12 @@ import time
 import datetime
 import logging
 import threading
-from watchdog.observers import Observer
+from watchdog.observers import Observer   
 from watchdog.events import FileSystemEventHandler
-
+ 
 MONITORED_DIRECTORY = r'C:\Users\Shireen\OneDrive\Desktop\VSCode Codes' #r stands for raw string
-INACTIVITY_LIMIT = 30 * 60    # 30 minutes of no file modification/creation
-INVALIDITY_DURATION = 10 * 60  #10 min duration sessions (or less) marked as 'null'
+INACTIVITY_LIMIT = 30 * 60  # 30 minutes of no file modification/creation
+INVALIDITY_DURATION = 10 *60  #10 min duration sessions (or less) marked as 'null'
 
 class fileHandler(FileSystemEventHandler):
     def __init__(self):
@@ -39,7 +39,7 @@ class fileHandler(FileSystemEventHandler):
             print(f"Error: Directory '{MONITORED_DIRECTORY}' does not exist.")
             self.project = "Error"
             return
-       #
+       
         subdirectories = [d for d in os.listdir(MONITORED_DIRECTORY) if os.path.isdir(os.path.join(MONITORED_DIRECTORY, d))]
         
         if not subdirectories:
@@ -62,13 +62,15 @@ class fileHandler(FileSystemEventHandler):
         while(True):
             time.sleep(10)  # every 10 seconds
             inactive_time = time.time() - self.lastActive # time since last file modification
-            sessionEnd = datetime.datetime.now()
             if self.sessionActive and (inactive_time > INACTIVITY_LIMIT): 
+                sessionEnd = datetime.datetime.now()
                 duration = sessionEnd - self.sessionStart
                 if duration.total_seconds() > INVALIDITY_DURATION: # long session
                     self.get_last_modified_folder()
                     print(f"Session ended at {sessionEnd}, Duration: {duration}, Project: Coding Session: {self.project}")
                     addEvent(self.sessionStart,sessionEnd, 'Coding Session: ' + str(self.project))
+                else:
+                    print(f"Session too short, discarded. Ended at {sessionEnd}, Duration: {duration}")
                 self.sessionActive = False
                       
 # runs script until keyboard interrupt  
